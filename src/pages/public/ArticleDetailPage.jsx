@@ -5,6 +5,8 @@ import { getPostBySlug, getPublishedPosts } from '../../services/postsService';
 import MarkdownRenderer from '../../components/common/MarkdownRenderer';
 import ImageWithFallback from '../../components/common/ImageWithFallback';
 import ArticleCard from '../../components/blog/ArticleCard';
+import SocialShareBar from '../../components/blog/SocialShareBar';
+import { updatePageSEO, resetDefaultSEO } from '../../lib/seo';
 
 function formatDate(dateStr) {
   if (!dateStr) return '';
@@ -56,6 +58,23 @@ export default function ArticleDetailPage() {
     }
     loadPost();
   }, [slug]);
+
+  // Synchronize browser title and OpenGraph / Twitter meta tags for social sharing
+  useEffect(() => {
+    if (post) {
+      updatePageSEO({
+        title: post.title,
+        description: post.excerpt || post.seoDescription,
+        image: post.featuredImageUrl,
+        url: window.location.href,
+        publishedTime: post.publishedAt,
+        author: post.authorName
+      });
+    }
+    return () => {
+      resetDefaultSEO();
+    };
+  }, [post]);
 
   const handleShare = () => {
     if (navigator.clipboard) {
@@ -199,6 +218,9 @@ export default function ArticleDetailPage() {
           </div>
         )}
       </div>
+
+      {/* Prominent Social Sharing Section with Live Card Preview */}
+      <SocialShareBar post={post} className="mb-8" />
 
       {/* Medical Info Disclaimer Box */}
       <div className="bg-gray-50 border-l-3 border-[#80C8C9] p-4 rounded-r text-xs text-gray-600 mb-12">

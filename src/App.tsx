@@ -4,7 +4,6 @@ import { AuthProvider } from './context/AuthContext';
 import { SettingsProvider } from './context/SettingsContext';
 import Header from './components/common/Header';
 import Footer from './components/common/Footer';
-import FirebaseNotice from './components/common/FirebaseNotice';
 
 // Public Pages
 import HomePage from './pages/public/HomePage';
@@ -30,7 +29,6 @@ import ProtectedRoute from './components/admin/ProtectedRoute';
 function PublicLayout() {
   return (
     <div className="min-h-screen flex flex-col bg-[#F7F7F7] text-[#202324]">
-      <FirebaseNotice />
       <Header />
       <main className="flex-1">
         <Outlet />

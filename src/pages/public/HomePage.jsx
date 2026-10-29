@@ -3,6 +3,7 @@ import FeaturedSection from '../../components/blog/FeaturedSection';
 import LatestArticlesSection from '../../components/blog/LatestArticlesSection';
 import { getFeaturedPosts, getPublishedPosts } from '../../services/postsService';
 import { Loader2 } from 'lucide-react';
+import { resetDefaultSEO } from '../../lib/seo';
 
 export default function HomePage() {
   const [featuredData, setFeaturedData] = useState({ mainFeatured: null, compactFeatured: [] });
@@ -10,6 +11,7 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    resetDefaultSEO();
     async function loadData() {
       try {
         const [featured, allPublished] = await Promise.all([
