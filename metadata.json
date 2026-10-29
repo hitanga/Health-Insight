@@ -1,0 +1,6 @@
+{
+  "name": "HealthInsight - Editorial Health & Wellness Blog",
+  "description": "A production-grade editorial health and wellness blog with secure admin dashboard, Firestore integration, and responsive reference-matching design.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,70 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Helper to check if user is the authorized administrator
+    function isAdmin() {
+      return isAuthenticated() && 
+        (request.auth.token.email.lower() == 'gopalhitanga@gmail.com' ||
+         request.auth.token.email.lower() == 'admin@healthinsight.com' ||
+         request.auth.token.admin == true);
+    }
+
+    // 1. Posts Collection
+    match /posts/{postId} {
+      // Public visitors can only read published, non-deleted posts
+      allow read: if (resource.data.status == 'published' && resource.data.deletedAt == null) || isAdmin();
+      
+      // Only the verified administrator can create, update, or delete posts
+      allow create, update, delete: if isAdmin();
+    }
+
+    // 2. Categories Collection
+    match /categories/{categoryId} {
+      // Public visitors can read categories
+      allow read: if true;
+      // Only administrator can create, update, or delete categories
+      allow write: if isAdmin();
+    }
+
+    // 3. Website Settings
+    match /settings/{settingId} {
+      // Public visitors can read website settings
+      allow read: if true;
+      // Only administrator can update settings
+      allow write: if isAdmin();
+    }
+
+    // 4. Contact Form Inquiries
+    match /contactMessages/{messageId} {
+      // Public visitors can create contact inquiries with basic validation
+      allow create: if request.resource.data.name is string &&
+                      request.resource.data.name.size() > 0 &&
+                      request.resource.data.name.size() < 100 &&
+                      request.resource.data.email is string &&
+                      request.resource.data.email.matches('.*@.*') &&
+                      request.resource.data.message is string &&
+                      request.resource.data.message.size() > 0 &&
+                      request.resource.data.message.size() < 5000;
+      
+      // Only administrator can read, update status, or delete contact submissions
+      allow read, update, delete: if isAdmin();
+    }
+
+    // 5. Newsletter Subscribers
+    match /newsletterSubscribers/{subscriberId} {
+      // Public visitors can subscribe with a valid email
+      allow create: if request.resource.data.email is string &&
+                      request.resource.data.email.matches('.*@.*');
+      
+      // Only administrator can view or manage subscriber rosters
+      allow read, update, delete: if isAdmin();
+    }
+
+  }
+}

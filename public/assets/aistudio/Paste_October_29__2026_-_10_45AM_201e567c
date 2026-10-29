@@ -1,0 +1,957 @@
+# PROJECT: HEALTH BLOG WEBSITE WITH SECURE FIREBASE ADMIN DASHBOARD
+
+Act as a senior React.js developer, UI/UX designer, Firebase architect, and frontend engineer. Build a complete, production-ready, responsive health and wellness blog website using the attached screenshot as the primary visual reference.
+
+The website must have a public-facing blog, individual article pages, an admin login system, and a private dashboard for creating, editing, publishing, and deleting articles.
+
+Do not create just a static UI mockup. Implement all frontend functionality, Firebase authentication, Firestore integration, validation, routing, CRUD operations, and error handling.
+
+## 1. TECHNOLOGY STACK
+
+Use the following technologies:
+
+- React.js with Vite.
+- JavaScript (ES6+), not TypeScript.
+- React Router DOM for routing.
+- Plain CSS or modular CSS for precise layout control.
+- Firebase Authentication for administrator login.
+- Cloud Firestore for all blog content and website settings.
+- React Context or a lightweight state-management approach where useful.
+- Lucide React for clean, minimal icons.
+- Google Fonts for typography.
+- Environment variables for Firebase configuration.
+
+Do not use Next.js, WordPress, a separate backend, Firebase Storage, or any other database.
+
+The website must run locally with npm install and npm run dev and be deployable to Firebase Hosting or Vercel.
+
+## 2. REFERENCE DESIGN — STRICT REQUIREMENT
+
+Use the attached reference image as the source of truth for the public website's visual design.
+
+Reproduce the screenshot as closely as possible in layout, typography, proportions, spacing, image sizes, card arrangements, backgrounds, borders, and footer.
+
+Do not redesign it into a generic modern blog template.
+
+### Overall visual appearance
+
+- Minimal, editorial, clean, professional website.
+- Light off-white background, approximately #F7F7F7.
+- Dark charcoal text, approximately #202324.
+- White article cards.
+- Softly rounded corners, approximately 5–8px.
+- Subtle turquoise accent, approximately #80C8C9.
+- Small, understated icons.
+- Minimal shadows and borders.
+- Generous white space.
+- Dark charcoal footer spanning the entire page width.
+- Main content centered with a maximum width of approximately 900–940px at a 1000px desktop viewport, proportionally adjusted to the screen size.
+- Avoid gradients, excessive animations, oversized decorative graphics, and unnecessary UI elements.
+
+### Exact font matching
+
+Inspect the supplied screenshot and reproduce its typography as closely as possible.
+
+Use Poppins from Google Fonts as the initial font candidate because its geometric sans-serif appearance is close to the reference. Compare the rendered result against the screenshot and adjust font weights, letter spacing, line heights, and sizes to achieve the closest match.
+
+Use approximately:
+- Main headings: Poppins, 600–700 weight.
+- Article titles: Poppins, 500–600 weight.
+- Body text: Poppins, 400 weight.
+- Navigation, dates, buttons, and metadata: Poppins, 400–500 weight.
+
+Load the font using Google Fonts. Do not substitute Arial or a default browser font unless the requested font fails to load.
+
+### Header and navigation
+
+Create a simple, clean header that fits the reference's minimal style.
+
+Navigation items:
+- Home
+- About Us
+- Health
+- Contact Us
+
+Include an editable website logo or site name on the left and navigation on the right.
+
+The logo must be editable through the admin dashboard. Allow the administrator to change:
+- Website name.
+- Text-based logo.
+- Optional logo image URL.
+- Short site tagline.
+
+Persist these settings in Firestore so changes remain after refreshing the page.
+
+Keep the header visually restrained, without introducing a large navigation bar that conflicts with the reference screenshot.
+
+## 3. HOME PAGE LAYOUT
+
+Recreate the two main content sections in the supplied screenshot.
+
+### Section A: Featured health articles
+
+At the top of the page, create a centered heading:
+
+"Your Guide to Better Health"
+
+Add a short, muted subtitle describing the website's health and wellness mission.
+
+Place a thin turquoise underline or accent beneath a selected word in the heading, similar to the screenshot.
+
+Below the heading, create a two-column featured section.
+
+LEFT COLUMN:
+- One large featured article card.
+- Approximately 55–60% of the featured section width.
+- Large image covering the card.
+- Image should use object-fit: cover.
+- Place a dark, semi-transparent overlay across the lower part of the image.
+- Display the article title in bold white text.
+- Display a small publication date with a calendar or clock icon.
+- Display a short excerpt in white or light gray.
+- Round the card corners.
+- Entire card should link to its article detail page.
+
+RIGHT COLUMN:
+- Three compact featured article cards stacked vertically.
+- Each card should have a horizontal layout.
+- Image on the left, occupying approximately 42–45% of card width.
+- White content area on the right.
+- Show a short article title, publication date, and a small "Read More →" link.
+- Maintain consistent image heights, card spacing, and alignment.
+
+The layout must closely match the screenshot's featured story arrangement.
+
+On mobile, stack the large featured card above the three smaller cards.
+
+### Section B: Explore Our Latest Articles
+
+Create a section below the featured articles with sufficient vertical spacing, as in the reference image.
+
+On desktop:
+- Left side: heading "Explore Our Latest Articles".
+- Right side: short descriptive paragraph.
+- Align both horizontally at the top of the section.
+
+Add a three-column article grid with two rows initially, showing six cards.
+
+Every article card must contain:
+1. A landscape thumbnail image.
+2. Article title.
+3. Publication date with a small icon.
+4. A "Read More →" link.
+
+Design requirements:
+- White card background.
+- Rounded corners.
+- No heavy borders.
+- Image occupies the top of the card.
+- Content padding approximately 16–20px.
+- Consistent card heights within each row.
+- Text wraps naturally without overflowing.
+- Images use a consistent aspect ratio, approximately 4:3.
+- Use a subtle hover effect on links and images without changing the overall design.
+
+Example article titles:
+- Simple Habits for a Healthier Lifestyle
+- Understanding Nutrition and Balanced Diets
+- The Importance of Quality Sleep
+- Managing Everyday Stress Naturally
+- Heart Health: Everyday Prevention Tips
+- Building a Sustainable Fitness Routine
+
+These are sample placeholder titles only. Replace them with Firestore content when available.
+
+Add a centered dark button below the grid:
+
+"View All Articles"
+
+Clicking it must open the Health/All Articles page.
+
+Implement pagination or a Load More function for additional articles. Do not load every article into the homepage at once.
+
+### Featured content management
+
+The administrator must be able to choose which article appears as the main featured story and which three articles appear in the compact featured list.
+
+If explicit featured selections are not available, automatically select the latest published articles.
+
+If no articles exist, display a polished empty state instead of broken images or blank cards.
+
+## 4. HEALTH PAGE — ALL ARTICLES
+
+Create a dedicated Health page listing all published articles.
+
+Route: /health
+
+Include:
+- Page title.
+- Short introduction.
+- Search input.
+- Category filter.
+- Responsive three-column article grid on desktop.
+- Two columns on tablets when space allows.
+- One column on mobile.
+- Pagination or Load More functionality.
+- Article cards styled exactly like the homepage cards.
+
+Suggested categories:
+- Nutrition
+- Fitness
+- Mental Wellness
+- Sleep
+- Heart Health
+- Preventive Care
+- Healthy Lifestyle
+- General Health
+
+The administrator can create and assign categories to articles.
+
+Search should match article titles, excerpts, and categories from the data already loaded into the application. Filtering and pagination must work together correctly.
+
+Only articles with status "published" may appear on public pages.
+
+## 5. INDIVIDUAL BLOG ARTICLE PAGE
+
+Route: /health/:slug
+
+Create a detailed article reading page that maintains the same typography and visual style as the homepage.
+
+Include:
+- Breadcrumb navigation.
+- Article category.
+- Article title.
+- Short excerpt.
+- Author name.
+- Publication date.
+- Featured image.
+- Article body with headings, paragraphs, lists, and links.
+- Optional additional images embedded in the article.
+- Related articles section.
+- Back to Health Articles link.
+
+The article body must support formatted content, including headings, paragraphs, ordered and unordered lists, bold text, italic text, and links.
+
+Use a simple rich-text editor in the dashboard, or a Markdown editor with a live preview. Store the article body in a consistent, documented format in Firestore.
+
+Safely render article content. Never render unsanitized HTML directly.
+
+Generate a URL-friendly slug from the article title and ensure slugs are unique.
+
+Support a custom SEO title, meta description, and social sharing image URL for each article.
+
+Do not display drafts, scheduled articles, or deleted articles to public visitors.
+
+## 6. ABOUT US PAGE
+
+Route: /about
+
+Create a clean About Us page consistent with the reference design.
+
+Include:
+- Main heading.
+- Website mission.
+- What readers can expect.
+- Health information standards.
+- Editorial principles.
+- A brief statement explaining that the website publishes educational health content.
+
+All text should be editable from the dashboard's Website Settings section where practical.
+
+Do not invent medical credentials, doctors, certifications, or institutional affiliations.
+
+## 7. CONTACT US PAGE
+
+Route: /contact
+
+Create a minimal Contact Us page with:
+- Page heading.
+- Short contact introduction.
+- Name field.
+- Email field.
+- Subject field.
+- Message field.
+- Submit button.
+- Form validation.
+- Success and error feedback.
+
+Do not display a fake email address or claim that a message was delivered if no submission service is configured.
+
+For the initial version, save contact submissions in a Firestore collection using a secure server-side or otherwise appropriately protected submission mechanism. Configure security rules so public users cannot read contact submissions or modify another user's submissions.
+
+Include basic spam protection and validation. Provide a clear setup note for any additional service or server-side component required to protect the form.
+
+Allow the administrator to review and mark contact submissions as read in the dashboard if this functionality is implemented.
+
+## 8. PRIVACY POLICY PAGE
+
+Route: /privacy-policy
+
+Create a dedicated Privacy Policy page linked in the footer.
+
+Include editable sections covering:
+- Information collected.
+- Contact form submissions.
+- Cookies and analytics, if enabled.
+- How information is used.
+- Third-party services, including Firebase.
+- Data retention.
+- Data security.
+- User rights and contact information.
+- Policy updates.
+
+Do not falsely claim that analytics, cookies, or advertising are used when they are not configured.
+
+Add a placeholder for the site's contact email that the administrator can configure in Website Settings.
+
+Display a last-updated date.
+
+The Privacy Policy must be editable through the dashboard.
+
+## 9. FOOTER — MATCH THE REFERENCE
+
+Recreate the dark footer visible in the reference image.
+
+Use a full-width charcoal background, approximately #202324, with white and light-gray text.
+
+On desktop, use four evenly spaced columns:
+
+COLUMN 1 — CONTACT INFORMATION
+- Configurable website address or organization details.
+- Configurable contact email.
+- Optional phone number.
+- Social media links using editable URLs.
+
+COLUMN 2 — QUICK LINKS
+- About Us
+- Health
+- Contact Us
+- Home
+
+COLUMN 3 — OUR TOPICS
+- Nutrition
+- Fitness
+- Mental Wellness
+- Healthy Lifestyle
+
+COLUMN 4 — GET LATEST UPDATES
+- Short newsletter description.
+- Email input.
+- Subscribe button.
+
+Below the columns, include a subtle copyright line and a Privacy Policy link.
+
+Keep the footer proportions, padding, typography, and dark background as close to the reference screenshot as possible.
+
+On smaller screens, stack the footer columns neatly.
+
+Newsletter subscription must have a working implementation, not a decorative form. If implemented, validate email addresses, prevent duplicate subscriptions where possible, and configure appropriate Firestore security or a protected server-side subscription endpoint. Never expose private credentials.
+
+## 10. ADMIN AUTHENTICATION
+
+Create a completely separate, private administration area.
+
+Routes:
+- /admin/login
+- /admin
+- /admin/posts
+- /admin/posts/new
+- /admin/posts/edit/:id
+- /admin/categories
+- /admin/settings
+- /admin/pages
+- /admin/messages (if contact-message management is implemented)
+
+### Firebase Authentication requirements
+
+Use Firebase Authentication with email and password.
+
+The website must have only one authorized administrator: the email address explicitly configured by the owner.
+
+Create a configuration variable:
+
+VITE_ADMIN_EMAIL=your-admin-email@example.com
+
+This value is a public client-side configuration value, not a secret. Never rely on this variable alone for authorization.
+
+Authentication behavior:
+- Unauthenticated visitors who access any /admin/* route must be redirected to /admin/login.
+- The login page contains email and password inputs.
+- Include password visibility toggle.
+- Include a Sign In button with loading state.
+- Show useful authentication errors.
+- Persist login sessions using Firebase Authentication.
+- Include a Sign Out action.
+- Prevent unauthorized users from viewing dashboard pages.
+- Do not offer public administrator registration.
+- Do not include a public sign-up route.
+- Do not expose dashboard navigation on the public website.
+- Never hardcode the administrator password.
+- Use Firebase's supported password reset functionality, if enabled.
+
+Only the configured administrator may perform administrative actions.
+
+IMPORTANT SECURITY REQUIREMENT:
+
+Client-side route protection is not sufficient.
+
+Enforce the administrator's email authorization in Firestore Security Rules and, where necessary, server-side functions. Verify the authenticated Firebase user's email and authorization status on the server or in security rules. Do not rely solely on the email string stored in local storage, React state, or a client-side environment variable.
+
+Because email comparison is case-insensitive, normalize the email consistently. Prefer a trusted administrator allowlist or custom claim when suitable, with an appropriately secured setup procedure.
+
+Document the process for creating the administrator account in Firebase Console.
+
+Do not create a registration form that lets visitors become administrators.
+
+## 11. ADMIN DASHBOARD DESIGN
+
+Create a professional, easy-to-use dashboard that is visually consistent with the website but optimized for content management.
+
+Dashboard layout:
+- Sidebar navigation on desktop.
+- Compact, collapsible sidebar on smaller screens.
+- Top header with dashboard title, current administrator email, and Sign Out button.
+- Main content area with white cards on a light-gray background.
+- Responsive tables or card lists.
+
+Sidebar navigation:
+- Overview
+- All Posts
+- Add New Post
+- Categories
+- Website Settings
+- Pages & Policies
+- Contact Messages, if implemented
+- View Website
+- Sign Out
+
+### Dashboard overview
+
+Display live summary cards:
+- Total posts.
+- Published posts.
+- Draft posts.
+- Categories.
+
+Add a recent articles table showing:
+- Thumbnail.
+- Title.
+- Category.
+- Status.
+- Last updated date.
+- Edit action.
+- Delete action.
+
+Use real Firestore data, not hardcoded statistics.
+
+Display helpful empty states when no content exists.
+
+## 12. CREATE NEW BLOG POST
+
+Route: /admin/posts/new
+
+Build a complete article editor.
+
+Required fields:
+- Article title.
+- URL slug, generated automatically but editable.
+- Short excerpt.
+- Category.
+- Author name.
+- Publication date.
+- Featured image URL.
+- Article body.
+- Status: Draft or Published.
+- Featured article checkbox.
+- SEO title.
+- SEO description.
+- Social sharing image URL, optional.
+
+Additional optional fields:
+- Reading time, calculated automatically.
+- Tags.
+- Schedule publication date, if scheduling is implemented.
+
+### IMAGE URL INPUT AND LIVE PREVIEW — CRITICAL REQUIREMENT
+
+This feature is mandatory.
+
+Provide an input field labeled "Featured Image URL".
+
+The administrator will host images externally and paste a direct image URL into this field.
+
+Example placeholder:
+https://example.com/images/healthy-food.jpg
+
+As soon as a valid URL is entered, display a live image preview inside the form.
+
+Image behavior:
+- Preview updates when the URL changes.
+- Show the image with object-fit: cover.
+- Display the image's approximate aspect ratio.
+- Provide a Clear Image button.
+- Show a friendly placeholder when no URL is entered.
+- Show an error message if the image fails to load.
+- Validate that the value is an acceptable HTTP or HTTPS URL.
+- Do not require Firebase Storage.
+- Do not upload the image to Firebase.
+- Save only the image URL string in Firestore.
+- Reuse the same preview component when editing existing posts.
+- Show the saved image preview when editing a post.
+- Do not block the entire form while the preview loads.
+- Avoid sending image URLs through a proxy unless explicitly configured.
+
+Allow the administrator to add optional image URLs within the article body, with previews where practical.
+
+### ARTICLE BODY EDITOR
+
+Provide a user-friendly editor with:
+- Heading 2 and Heading 3.
+- Paragraph.
+- Bold.
+- Italic.
+- Ordered list.
+- Unordered list.
+- Link insertion.
+- Image URL insertion, if supported.
+- Undo and redo, if supported.
+- Preview mode.
+
+A Markdown editor with a preview is acceptable if it is reliable, accessible, and easy to use.
+
+The editor must save and reload the article content without losing formatting.
+
+### FORM ACTIONS
+
+Buttons:
+- Save as Draft.
+- Publish Article.
+- Preview Article.
+- Cancel.
+
+Behavior:
+- Validate all required fields.
+- Show inline validation errors.
+- Disable duplicate submissions while saving.
+- Display success or error notifications.
+- Navigate appropriately after saving.
+- Confirm before leaving with unsaved changes.
+- Preserve entered content when an operation fails.
+- Generate a unique slug and handle slug conflicts.
+
+Published articles must become visible on the public website without requiring a rebuild or redeployment.
+
+## 13. EDIT AND DELETE POSTS
+
+### Edit Post
+
+Load the selected article from Firestore and prefill every field.
+
+The image URL input must display the existing image preview immediately.
+
+Allow changes to the title, slug, excerpt, category, body, status, SEO fields, publication date, and featured status.
+
+Save changes to Firestore and update public pages dynamically.
+
+### Delete Post
+
+Provide a Delete action with a confirmation dialog.
+
+Clearly show which article will be deleted.
+
+For the initial implementation, use a safe deletion strategy such as soft deletion with a deletedAt timestamp and a deleted status, or implement permanent deletion if explicitly required.
+
+Deleted posts must never appear on public pages.
+
+Handle missing records and Firestore errors gracefully.
+
+## 14. CATEGORY MANAGEMENT
+
+Route: /admin/categories
+
+Allow the administrator to:
+- Create a category.
+- Edit a category.
+- Delete a category when safe to do so.
+- Assign a category name and slug.
+- View the number of articles in each category.
+
+Prevent accidental removal of categories currently assigned to articles, or require the administrator to reassign those articles first.
+
+Store categories in Firestore.
+
+## 15. WEBSITE SETTINGS AND EDITABLE LOGO
+
+Route: /admin/settings
+
+Provide a settings form with the following fields:
+
+BRANDING
+- Website name.
+- Text logo.
+- Logo image URL.
+- Tagline.
+- Primary text color.
+- Accent color.
+
+CONTACT DETAILS
+- Contact email.
+- Phone number, optional.
+- Address, optional.
+- Social media URLs.
+
+FOOTER
+- Footer description.
+- Copyright text.
+- Footer topic links.
+- Newsletter settings, if enabled.
+
+SEO DEFAULTS
+- Default meta title.
+- Default meta description.
+- Default social sharing image URL.
+
+Save settings to a dedicated Firestore document.
+
+The public header, footer, page metadata, and editable text must use the saved settings wherever appropriate.
+
+If a logo image URL is provided, show its preview and use it in the header. If not, display the text-based logo.
+
+Changes must persist across refreshes and be visible on the public website without redeployment.
+
+Validate image URLs and ensure broken logo images fall back to the text logo.
+
+## 16. FIRESTORE DATABASE STRUCTURE
+
+Use a clear, maintainable Firestore schema.
+
+### Collection: posts
+
+Each document should contain fields similar to:
+
+{
+  "title": "Simple Habits for a Healthier Lifestyle",
+  "slug": "simple-habits-healthier-lifestyle",
+  "excerpt": "Practical habits to support everyday wellness.",
+  "body": "Structured Markdown or sanitized rich-text content",
+  "categoryId": "nutrition",
+  "categoryName": "Nutrition",
+  "authorName": "Editorial Team",
+  "featuredImageUrl": "https://example.com/health.jpg",
+  "socialImageUrl": "",
+  "status": "published",
+  "isFeatured": false,
+  "seoTitle": "",
+  "seoDescription": "",
+  "tags": [],
+  "readingTime": 5,
+  "publishedAt": "Firestore Timestamp",
+  "createdAt": "Firestore Timestamp",
+  "updatedAt": "Firestore Timestamp",
+  "deletedAt": null
+}
+
+Use Firestore Timestamp values rather than ISO-formatted strings for stored dates.
+
+Use server timestamps for createdAt and updatedAt where appropriate.
+
+Ensure the article body format is consistent across the editor, Firestore, and public article renderer.
+
+### Collection: categories
+
+Fields:
+- name
+- slug
+- description
+- createdAt
+- updatedAt
+
+### Collection: settings
+
+Use a known document ID, such as settings/website.
+
+Store:
+- branding settings.
+- contact information.
+- footer settings.
+- default SEO settings.
+- editable About Us content.
+- editable Privacy Policy content.
+- editable Contact page introductory text.
+
+### Collection: newsletterSubscribers
+
+Store validated subscriber information only if newsletter functionality is enabled. Restrict read access and use suitable abuse prevention.
+
+### Collection: contactMessages
+
+Store contact form submissions only if the contact feature is implemented.
+
+Never allow public visitors to read all messages or access private subscriber information.
+
+Use Firestore indexes when required and document how to create them.
+
+## 17. FIRESTORE SECURITY RULES
+
+Generate complete Firestore Security Rules as part of the project.
+
+Rules must enforce:
+- Public visitors can read only published, non-deleted posts.
+- Public visitors can read public website settings and categories as needed.
+- Public visitors cannot create, edit, or delete blog posts.
+- Only the authorized administrator can create, update, or delete posts.
+- Only the authorized administrator can manage categories and website settings.
+- Only the authorized administrator can access private dashboard data.
+- Public visitors cannot read contact submissions or subscriber records.
+- No unauthenticated write access to administrative collections.
+- Deleted and draft posts are not exposed through public queries.
+
+Do not assume that hiding dashboard links protects Firestore data.
+
+Use Firebase Authentication's request.auth and trusted authorization checks in the rules. If using custom claims or a dedicated administrator allowlist, document how they are provisioned securely.
+
+Ensure that public reads of individual articles cannot bypass the published-status requirement.
+
+Where a public form needs writes, narrowly scope the permitted operation and validate the data. Never grant unrestricted public writes to a collection.
+
+Include the rules file in the generated project and explain how to publish it in Firebase Console.
+
+## 18. FIREBASE CONFIGURATION
+
+Create a reusable Firebase initialization file, for example:
+
+src/lib/firebase.js
+
+Read configuration from environment variables:
+
+VITE_FIREBASE_API_KEY
+VITE_FIREBASE_AUTH_DOMAIN
+VITE_FIREBASE_PROJECT_ID
+VITE_FIREBASE_STORAGE_BUCKET
+VITE_FIREBASE_MESSAGING_SENDER_ID
+VITE_FIREBASE_APP_ID
+VITE_ADMIN_EMAIL
+
+Firebase client configuration is not a substitute for access control. The security of the application must depend on proper authentication and Firestore Security Rules, not on hiding the client configuration.
+
+Create an .env.example file containing placeholder values.
+
+Never place a Firebase service account private key or Admin SDK credentials in frontend code.
+
+Do not ask me to paste private credentials into source files.
+
+Provide clear setup instructions for:
+1. Creating a Firebase project.
+2. Registering a web application.
+3. Enabling Email/Password authentication.
+4. Creating the administrator account in Firebase Console.
+5. Setting the administrator authorization mechanism.
+6. Creating the Firestore database.
+7. Publishing Firestore security rules.
+8. Adding the environment variables.
+9. Running the application locally.
+10. Deploying the application.
+
+If additional trusted server-side functions are necessary for secure authorization, contact forms, or newsletter subscriptions, implement or clearly document them separately.
+
+## 19. ROUTING STRUCTURE
+
+Implement these public routes:
+
+/
+ /about
+ /health
+ /health/:slug
+ /contact
+ /privacy-policy
+
+Implement these administrative routes:
+
+/admin/login
+/admin
+/admin/posts
+/admin/posts/new
+/admin/posts/edit/:id
+/admin/categories
+/admin/settings
+/admin/pages
+/admin/messages
+
+Use appropriate route guards and role checks.
+
+Create a custom 404 page matching the website's design.
+
+Redirect unauthorized dashboard visitors to the login page and preserve the requested destination where appropriate.
+
+## 20. RESPONSIVE DESIGN
+
+Desktop:
+- Match the supplied reference image closely.
+- Featured content uses the large-left/small-right arrangement.
+- Latest articles use three columns.
+- Footer uses four columns.
+
+Tablet:
+- Maintain comfortable reading widths.
+- Use two-column grids where necessary.
+- Prevent text and images from overflowing.
+
+Mobile:
+- Single-column featured layout.
+- Single-column article cards.
+- Compact navigation with an accessible mobile menu.
+- Stack footer sections.
+- Make article typography comfortable to read.
+- Ensure buttons and form controls are touch-friendly.
+- Avoid horizontal scrolling.
+- Keep image aspect ratios consistent.
+
+Use CSS breakpoints and test at approximately 1440px, 1024px, 768px, 390px, and 360px widths.
+
+The screenshot's desktop layout has priority, but all mobile layouts must remain functional and visually consistent.
+
+## 21. ACCESSIBILITY, PERFORMANCE, AND SEO
+
+Implement:
+- Semantic HTML.
+- Accessible labels for inputs.
+- Keyboard-accessible navigation.
+- Visible focus indicators.
+- Useful image alt text.
+- Lazy loading for non-critical images.
+- Image loading and error states.
+- Loading skeletons where appropriate.
+- Error and empty states.
+- Appropriate document titles and meta descriptions.
+- Canonical URL support where practical.
+- Open Graph metadata.
+- Article structured data using Schema.org where appropriate.
+- A sitemap and robots.txt where practical for the deployment setup.
+
+Health content must be presented responsibly. Include a suitable medical-information disclaimer explaining that general educational content is not a substitute for individualized professional medical advice.
+
+Do not invent scientific evidence, doctor credentials, or clinical claims.
+
+Ensure the article renderer safely handles Markdown or rich-text content.
+
+## 22. COMPONENT ARCHITECTURE
+
+Use reusable React components rather than writing the entire application in a single file.
+
+Suggested public components:
+- Header
+- Footer
+- FeaturedArticles
+- FeaturedArticleCard
+- ArticleGrid
+- ArticleCard
+- ArticleMeta
+- ImageWithFallback
+- SearchBar
+- CategoryFilter
+- Pagination
+- NewsletterForm
+- ContactForm
+- Breadcrumbs
+- LoadingState
+- ErrorState
+- EmptyState
+
+Suggested admin components:
+- AdminLayout
+- AdminSidebar
+- AdminHeader
+- ProtectedRoute
+- DashboardStatCard
+- PostsTable
+- PostEditorForm
+- ImageUrlPreview
+- RichTextEditor
+- DeleteConfirmationDialog
+- CategoryManager
+- WebsiteSettingsForm
+- NotificationToast
+
+Suggested service modules:
+- firebase.js
+- authService.js
+- postsService.js
+- categoriesService.js
+- settingsService.js
+- contactService.js
+- newsletterService.js, if implemented.
+
+Keep Firestore operations out of presentational components wherever practical.
+
+## 23. VISUAL ACCURACY CHECKLIST
+
+Before completing the project, compare the rendered homepage against the supplied screenshot.
+
+Verify:
+- Main heading is centered and typography is similar.
+- Turquoise heading underline is subtle.
+- Large featured image is on the left.
+- Three smaller featured cards are on the right.
+- Latest articles heading and paragraph share one horizontal row.
+- Latest article cards appear in a three-column grid.
+- Card images have consistent dimensions.
+- Card spacing and typography match the reference.
+- View All Articles button is centered.
+- Footer has four columns on desktop.
+- Footer background is dark charcoal.
+- Body background remains off-white.
+- Typography, spacing, and proportions closely follow the reference.
+
+Do not replace the screenshot's layout with a different design system.
+
+## 24. IMPLEMENTATION AND ACCEPTANCE CRITERIA
+
+The final result must be a functional application, not just a design preview.
+
+Verify the following:
+
+1. Public visitors can browse the homepage, About Us, Health, Contact Us, and Privacy Policy.
+2. Public visitors can search articles and filter by category.
+3. Published articles are fetched from Firestore.
+4. Draft articles are hidden from public visitors.
+5. The administrator can sign in with Firebase Authentication.
+6. Unauthorized users cannot access administrative functions or private data.
+7. The administrator can create, edit, publish, unpublish, and delete articles.
+8. The featured image URL input displays a working preview.
+9. Broken image URLs display a friendly fallback.
+10. The administrator can edit the website logo and branding.
+11. Changes persist after refreshing the browser.
+12. The homepage updates when published content changes.
+13. Search, pagination, forms, buttons, and navigation work correctly.
+14. Firestore Security Rules protect administrative operations.
+15. The website is responsive and visually faithful to the reference.
+16. No private credentials are exposed.
+17. No core functionality relies on hardcoded sample data.
+18. The application includes useful loading, error, and empty states.
+19. The application can be started and deployed using the documented instructions.
+
+## 25. FINAL DELIVERY REQUIREMENTS
+
+Generate the complete React project with:
+- All required source files.
+- All page components.
+- Reusable CSS.
+- Firebase configuration.
+- Authentication implementation.
+- Firestore service functions.
+- Admin dashboard.
+- Blog creation and editing forms.
+- Live image URL preview.
+- Editable branding and logo.
+- Firestore security rules.
+- Environment variable example.
+- package.json.
+- README.md with setup and deployment instructions.
+
+First, inspect the attached screenshot and establish the layout and typography. Then implement the application in a logical order: project structure, Firebase configuration, public layout, Firestore data layer, authentication, dashboard, CRUD operations, and responsive styling.
+
+Do not stop after generating the homepage or dashboard mockup. Complete the connected application and verify the main workflows.
+
+If Firebase credentials have not yet been configured, build the complete integration with clear setup instructions and show a friendly configuration error rather than pretending that Firebase operations succeeded.
+
+Prioritize visual fidelity to the reference, secure administrator-only access, maintainable React code, and a reliable content-management workflow.
