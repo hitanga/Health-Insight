@@ -15,14 +15,11 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
     <script>
-      // Single Page App redirect handler for path-based reloads
-      // If a path like /health or /admin is visited directly without hash, redirect to hash route
-      (function() {
-        var path = window.location.pathname;
-        if (path && path !== '/' && !window.location.hash) {
-          window.location.replace('/#' + path + window.location.search);
-        }
-      })();
+      // If a user visits an old hash route, normalize to clean pathname
+      if (window.location.hash && window.location.hash.startsWith('#/')) {
+        var cleanPath = window.location.hash.substring(1);
+        window.history.replaceState(null, '', cleanPath);
+      }
     </script>
   </head>
   <body class="bg-[#F7F7F7] text-[#202324] antialiased">

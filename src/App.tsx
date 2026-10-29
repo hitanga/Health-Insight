@@ -1,5 +1,5 @@
 import React from 'react';
-import { HashRouter, Routes, Route, Outlet } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { SettingsProvider } from './context/SettingsContext';
 import Header from './components/common/Header';
@@ -44,7 +44,7 @@ export default function App() {
   return (
     <AuthProvider>
       <SettingsProvider>
-        <HashRouter>
+        <BrowserRouter>
           <Routes>
             {/* Public Layout and Routes */}
             <Route element={<PublicLayout />}>
@@ -79,7 +79,7 @@ export default function App() {
               <Route path="messages" element={<AdminMessagesPage />} />
             </Route>
           </Routes>
-        </HashRouter>
+        </BrowserRouter>
       </SettingsProvider>
     </AuthProvider>
   );
