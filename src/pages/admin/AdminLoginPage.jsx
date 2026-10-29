@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { Shield, Eye, EyeOff, Loader2, AlertCircle, ArrowLeft, KeyRound, CheckCircle2, UserPlus } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { isAuthorizedAdminEmail } from '../../lib/firebase';
 
 export default function AdminLoginPage() {
   const { login, registerAdmin, configuredAdminEmail, isFirebaseConfigured, authError } = useAuth();
-  const [email, setEmail] = useState(configuredAdminEmail || 'gopalhitanga@gmail.com');
+  const [email, setEmail] = useState('gopalhitanga@gmail.com');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isRegisterMode, setIsRegisterMode] = useState(false);
@@ -27,8 +28,8 @@ export default function AdminLoginPage() {
       return;
     }
 
-    if (email.trim().toLowerCase() !== configuredAdminEmail) {
-      setLocalError(`Unauthorized email. Only the administrator (${configuredAdminEmail}) can access the dashboard.`);
+    if (!isAuthorizedAdminEmail(email)) {
+      setLocalError(`Unauthorized email. Only the administrator (gopalhitanga@gmail.com) can access the dashboard.`);
       return;
     }
 
@@ -153,12 +154,21 @@ export default function AdminLoginPage() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="admin@example.com"
+              placeholder="gopalhitanga@gmail.com"
               className="w-full px-3.5 py-2 text-xs sm:text-sm border border-gray-200 rounded-[4px] focus:outline-none focus:border-[#80C8C9] focus:ring-1 focus:ring-[#80C8C9]"
             />
-            <p className="text-[10px] text-gray-400 mt-1">
-              Must match authorized administrator: <strong className="text-gray-600">{configuredAdminEmail}</strong>
-            </p>
+            <div className="flex items-center justify-between text-[10px] text-gray-500 mt-1">
+              <span>Must match authorized administrator: <strong className="text-gray-800">gopalhitanga@gmail.com</strong></span>
+              {email !== 'gopalhitanga@gmail.com' && (
+                <button
+                  type="button"
+                  onClick={() => setEmail('gopalhitanga@gmail.com')}
+                  className="text-[#2b7a78] font-semibold hover:underline"
+                >
+                  Set to gopalhitanga@gmail.com
+                </button>
+              )}
+            </div>
           </div>
 
           <div>

@@ -6,7 +6,7 @@ import {
   onAuthStateChanged,
   sendPasswordResetEmail
 } from 'firebase/auth';
-import { auth, isFirebaseConfigured, configuredAdminEmail } from '../lib/firebase';
+import { auth, isFirebaseConfigured, configuredAdminEmail, isAuthorizedAdminEmail } from '../lib/firebase';
 
 const AuthContext = createContext(null);
 
@@ -22,7 +22,7 @@ export function AuthProvider({ children }) {
       const unsubscribe = onAuthStateChanged(auth, (user) => {
         if (user) {
           const userEmail = (user.email || '').toLowerCase().trim();
-          const authorized = userEmail === configuredAdminEmail;
+          const authorized = isAuthorizedAdminEmail(userEmail);
           setCurrentUser(user);
           setIsAdmin(authorized);
         } else {
@@ -58,7 +58,7 @@ export function AuthProvider({ children }) {
         const cred = await signInWithEmailAndPassword(auth, normalizedEmail, password);
         const userEmail = (cred.user.email || '').toLowerCase().trim();
         
-        if (userEmail !== configuredAdminEmail) {
+        if (!isAuthorizedAdminEmail(userEmail)) {
           await fbSignOut(auth);
           throw new Error(`Unauthorized: ${userEmail} is not configured as the system administrator.`);
         }
@@ -80,7 +80,7 @@ export function AuthProvider({ children }) {
       }
     } else {
       // Local demo login
-      if (normalizedEmail === configuredAdminEmail && password.length >= 6) {
+      if (isAuthorizedAdminEmail(normalizedEmail) && password.length >= 6) {
         const mockUser = {
           email: normalizedEmail,
           uid: 'demo-admin-uid-12345',
@@ -90,7 +90,7 @@ export function AuthProvider({ children }) {
         setCurrentUser(mockUser);
         setIsAdmin(true);
         return { success: true };
-      } else if (normalizedEmail !== configuredAdminEmail) {
+      } else if (!isAuthorizedAdminEmail(normalizedEmail)) {
         const msg = `Email must match the administrator email: ${configuredAdminEmail}`;
         setAuthError(msg);
         throw new Error(msg);
@@ -106,7 +106,7 @@ export function AuthProvider({ children }) {
     setAuthError(null);
     const normalizedEmail = email.toLowerCase().trim();
 
-    if (normalizedEmail !== configuredAdminEmail) {
+    if (!isAuthorizedAdminEmail(normalizedEmail)) {
       const msg = `Only the configured administrator email (${configuredAdminEmail}) can be registered.`;
       setAuthError(msg);
       throw new Error(msg);
