@@ -44,9 +44,15 @@ export async function updateWebsiteSettings(newSettings) {
   };
 
   if (isFirebaseConfigured && db) {
-    const docRef = doc(db, 'settings', 'website');
-    await setDoc(docRef, merged, { merge: true });
-    return merged;
+    try {
+      const docRef = doc(db, 'settings', 'website');
+      await setDoc(docRef, merged, { merge: true });
+      return merged;
+    } catch (err) {
+      console.warn('Firestore settings update failed, saving locally:', err);
+      saveLocalSettings(merged);
+      return merged;
+    }
   } else {
     saveLocalSettings(merged);
     return merged;

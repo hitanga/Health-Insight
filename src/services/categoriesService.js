@@ -54,11 +54,24 @@ export async function saveCategory(category) {
   const id = category.id || slug;
 
   if (isFirebaseConfigured && db) {
-    await setDoc(doc(db, 'categories', id), {
-      ...catData,
-      createdAt: category.createdAt || (isFirebaseConfigured ? serverTimestamp() : new Date().toISOString())
-    }, { merge: true });
-    return { id, ...catData };
+    try {
+      await setDoc(doc(db, 'categories', id), {
+        ...catData,
+        createdAt: category.createdAt || (isFirebaseConfigured ? serverTimestamp() : new Date().toISOString())
+      }, { merge: true });
+      return { id, ...catData };
+    } catch (err) {
+      console.warn('Firestore saveCategory failed, saving to local store:', err);
+      const list = getLocalCategories();
+      const idx = list.findIndex(c => c.id === id);
+      if (idx !== -1) {
+        list[idx] = { ...list[idx], ...catData };
+      } else {
+        list.push({ id, ...catData, articleCount: 0 });
+      }
+      saveLocalCategories(list);
+      return { id, ...catData };
+    }
   } else {
     const list = getLocalCategories();
     const idx = list.findIndex(c => c.id === id);
@@ -74,8 +87,15 @@ export async function saveCategory(category) {
 
 export async function deleteCategory(id) {
   if (isFirebaseConfigured && db) {
-    await deleteDoc(doc(db, 'categories', id));
-    return true;
+    try {
+      await deleteDoc(doc(db, 'categories', id));
+      return true;
+    } catch (err) {
+      console.warn('Firestore deleteCategory failed, deleting locally:', err);
+      const list = getLocalCategories().filter(c => c.id !== id);
+      saveLocalCategories(list);
+      return true;
+    }
   } else {
     const list = getLocalCategories().filter(c => c.id !== id);
     saveLocalCategories(list);

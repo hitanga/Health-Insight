@@ -1,6 +1,6 @@
 import { initializeApp, getApps, getApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
+import { getFirestore, initializeFirestore } from 'firebase/firestore';
 
 // Read Firebase configuration from environment or project credentials provided
 const firebaseConfig = {
@@ -53,7 +53,14 @@ if (isFirebaseConfigured) {
   try {
     app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
     auth = getAuth(app);
-    db = getFirestore(app);
+    // Use initializeFirestore with auto-detect long polling for maximum network compatibility
+    try {
+      db = initializeFirestore(app, {
+        experimentalAutoDetectLongPolling: true
+      });
+    } catch {
+      db = getFirestore(app);
+    }
   } catch (error) {
     console.error('Failed to initialize Firebase SDK:', error);
   }

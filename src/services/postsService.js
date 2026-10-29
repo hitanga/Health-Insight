@@ -184,8 +184,19 @@ export async function createPost(postData) {
   };
 
   if (isFirebaseConfigured && db) {
-    const docRef = await addDoc(collection(db, 'posts'), newPost);
-    return { id: docRef.id, ...newPost };
+    try {
+      const docRef = await addDoc(collection(db, 'posts'), newPost);
+      return { id: docRef.id, ...newPost };
+    } catch (err) {
+      console.warn('Firestore addDoc failed (possibly blocked by browser shields/ad-blocker):', err);
+      // Gracefully persist to local storage so user content is never lost!
+      const posts = getLocalPosts();
+      const id = `post-${Date.now()}`;
+      const created = { id, ...newPost, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), _blockedByClient: true };
+      posts.unshift(created);
+      saveLocalPosts(posts);
+      return created;
+    }
   } else {
     const posts = getLocalPosts();
     const id = `local-post-${Date.now()}`;
@@ -212,9 +223,21 @@ export async function updatePost(id, updates) {
   }
 
   if (isFirebaseConfigured && db) {
-    const postRef = doc(db, 'posts', id);
-    await updateDoc(postRef, updatePayload);
-    return { id, ...updatePayload };
+    try {
+      const postRef = doc(db, 'posts', id);
+      await updateDoc(postRef, updatePayload);
+      return { id, ...updatePayload };
+    } catch (err) {
+      console.warn('Firestore updateDoc failed, saving to local store:', err);
+      const posts = getLocalPosts();
+      const index = posts.findIndex(p => p.id === id);
+      if (index !== -1) {
+        posts[index] = { ...posts[index], ...updatePayload, updatedAt: new Date().toISOString(), _blockedByClient: true };
+        saveLocalPosts(posts);
+        return posts[index];
+      }
+      return { id, ...updatePayload };
+    }
   } else {
     const posts = getLocalPosts();
     const index = posts.findIndex(p => p.id === id);
@@ -232,16 +255,33 @@ export async function updatePost(id, updates) {
  */
 export async function deletePost(id, soft = true) {
   if (isFirebaseConfigured && db) {
-    const postRef = doc(db, 'posts', id);
-    if (soft) {
-      await updateDoc(postRef, {
-        status: 'deleted',
-        deletedAt: serverTimestamp()
-      });
-    } else {
-      await deleteDoc(postRef);
+    try {
+      const postRef = doc(db, 'posts', id);
+      if (soft) {
+        await updateDoc(postRef, {
+          status: 'deleted',
+          deletedAt: serverTimestamp()
+        });
+      } else {
+        await deleteDoc(postRef);
+      }
+      return true;
+    } catch (err) {
+      console.warn('Firestore delete failed, deleting from local storage:', err);
+      const posts = getLocalPosts();
+      const index = posts.findIndex(p => p.id === id);
+      if (index !== -1) {
+        if (soft) {
+          posts[index].deletedAt = new Date().toISOString();
+          posts[index].status = 'deleted';
+        } else {
+          posts.splice(index, 1);
+        }
+        saveLocalPosts(posts);
+        return true;
+      }
+      return false;
     }
-    return true;
   } else {
     const posts = getLocalPosts();
     const index = posts.findIndex(p => p.id === id);

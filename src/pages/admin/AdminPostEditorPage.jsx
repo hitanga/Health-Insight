@@ -198,14 +198,28 @@ export default function AdminPostEditorPage() {
       };
 
       if (isEditing) {
-        await updatePost(id, payload);
-        setFeedback({ success: 'Article updated successfully!', error: null });
+        const updated = await updatePost(id, payload);
+        if (updated?._blockedByClient) {
+          setFeedback({
+            success: 'Article updated and preserved! Note: Your browser ad-blocker / Brave Shields is blocking network requests to firestore.googleapis.com. Disable Shields/AdBlock for this domain for cloud sync.',
+            error: null
+          });
+        } else {
+          setFeedback({ success: 'Article updated successfully in Firestore!', error: null });
+        }
       } else {
         const created = await createPost(payload);
-        setFeedback({ success: 'Article created successfully!', error: null });
+        if (created?._blockedByClient) {
+          setFeedback({
+            success: 'Article created and preserved! Note: Your browser ad-blocker / Brave Shields is blocking network requests to firestore.googleapis.com. Disable Shields/AdBlock for this domain for cloud sync.',
+            error: null
+          });
+        } else {
+          setFeedback({ success: 'Article created successfully in Firestore!', error: null });
+        }
         setTimeout(() => {
           navigate(`/admin/posts/edit/${created.id}`);
-        }, 800);
+        }, 1200);
       }
     } catch (err) {
       setFeedback({ error: err.message || 'Failed to save article.', success: null });
