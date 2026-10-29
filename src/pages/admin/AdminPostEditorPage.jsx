@@ -600,7 +600,7 @@ export default function AdminPostEditorPage() {
                 type="button"
                 onClick={() => setFormData({
                   ...formData,
-                  featuredImageUrl: 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1000&q=80'
+                  featuredImageUrl: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=1000&q=80'
                 })}
                 className="text-[10px] text-[#2b7a78] hover:underline"
               >

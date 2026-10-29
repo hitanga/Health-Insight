@@ -7,7 +7,7 @@
 export const DEFAULT_SEO = {
   title: 'HealthInsight - Editorial Health & Wellness Blog',
   description: 'Evidence-based insights, nutrition guides, and sustainable health practices to support your everyday vitality.',
-  image: 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1200&h=630&q=85',
+  image: 'https://images.unsplash.com/photo-1505751172876-fa1923c5c528?auto=format&fit=crop&w=1200&h=630&q=85',
   type: 'website',
   siteName: 'HealthInsight'
 };

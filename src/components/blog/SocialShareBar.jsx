@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { Share2, Check, Copy, ExternalLink, Eye, Info } from 'lucide-react';
+import { Share2, Check, Copy, ExternalLink, Eye, Info, RefreshCw } from 'lucide-react';
+
+const DEFAULT_BRAND_IMAGE = 'https://images.unsplash.com/photo-1505751172876-fa1923c5c528?auto=format&fit=crop&w=1200&h=630&q=85';
 
 export default function SocialShareBar({ post, className = '' }) {
   const [copied, setCopied] = useState(false);
@@ -8,13 +10,22 @@ export default function SocialShareBar({ post, className = '' }) {
   if (!post) return null;
 
   const currentUrl = typeof window !== 'undefined' ? window.location.href : '';
+  const cleanBaseUrl = currentUrl.split('?')[0];
+
   const shareTitle = post.title || 'HealthInsight Article';
   const shareDesc = post.excerpt || post.seoDescription || 'Read this evidence-based article on HealthInsight.';
-  const shareImage = post.featuredImageUrl || 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1200&h=630&q=85';
+  const shareImage = post.featuredImageUrl || post.socialImageUrl || DEFAULT_BRAND_IMAGE;
+
+  // Cache-busting timestamp so Facebook, WhatsApp, Twitter, and LinkedIn fetch the newest image and title
+  const versionKey = post.updatedAt 
+    ? new Date(post.updatedAt).getTime() 
+    : (post.publishedAt ? new Date(post.publishedAt).getTime() : Date.now());
+  
+  const shareUrl = `${cleanBaseUrl}?v=${versionKey}`;
 
   const handleCopyLink = () => {
     if (navigator.clipboard) {
-      navigator.clipboard.writeText(currentUrl);
+      navigator.clipboard.writeText(shareUrl);
       setCopied(true);
       setTimeout(() => setCopied(false), 2500);
     }
@@ -26,9 +37,9 @@ export default function SocialShareBar({ post, className = '' }) {
         await navigator.share({
           title: shareTitle,
           text: shareDesc,
-          url: currentUrl
+          url: shareUrl
         });
-      } catch (err) {
+      } catch {
         // User cancelled or share failed, fallback silently
       }
     } else {
@@ -39,7 +50,7 @@ export default function SocialShareBar({ post, className = '' }) {
   const shareLinks = [
     {
       name: 'WhatsApp',
-      url: `https://api.whatsapp.com/send?text=${encodeURIComponent(shareTitle + ' - ' + currentUrl)}`,
+      url: `https://api.whatsapp.com/send?text=${encodeURIComponent(shareTitle + ' - ' + shareUrl)}`,
       bg: 'hover:bg-[#25D366] hover:text-white',
       border: 'hover:border-[#25D366]',
       icon: (
@@ -50,7 +61,7 @@ export default function SocialShareBar({ post, className = '' }) {
     },
     {
       name: 'X (Twitter)',
-      url: `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareTitle)}&url=${encodeURIComponent(currentUrl)}`,
+      url: `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareTitle)}&url=${encodeURIComponent(shareUrl)}`,
       bg: 'hover:bg-[#000000] hover:text-white',
       border: 'hover:border-black',
       icon: (
@@ -61,7 +72,7 @@ export default function SocialShareBar({ post, className = '' }) {
     },
     {
       name: 'Facebook',
-      url: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`,
+      url: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`,
       bg: 'hover:bg-[#1877F2] hover:text-white',
       border: 'hover:border-[#1877F2]',
       icon: (
@@ -72,7 +83,7 @@ export default function SocialShareBar({ post, className = '' }) {
     },
     {
       name: 'LinkedIn',
-      url: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(currentUrl)}`,
+      url: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`,
       bg: 'hover:bg-[#0A66C2] hover:text-white',
       border: 'hover:border-[#0A66C2]',
       icon: (
@@ -123,7 +134,7 @@ export default function SocialShareBar({ post, className = '' }) {
             {copied ? (
               <>
                 <Check className="w-3.5 h-3.5 text-emerald-600" />
-                <span>Copied!</span>
+                <span>Link Copied!</span>
               </>
             ) : (
               <>
@@ -161,11 +172,24 @@ export default function SocialShareBar({ post, className = '' }) {
       {/* Interactive Social Media Preview Card */}
       {showPreview && (
         <div className="mt-5 pt-4 border-t border-gray-100">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-medium text-gray-500 flex items-center gap-1.5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+            <span className="text-xs font-medium text-gray-600 flex items-center gap-1.5">
               <Info className="w-3.5 h-3.5 text-[#80C8C9]" />
-              Social Media Preview (Title &amp; Image as displayed on WhatsApp, Facebook, X, &amp; LinkedIn):
+              Social Preview (Title &amp; Image as verified on Facebook, WhatsApp, X, &amp; LinkedIn):
             </span>
+
+            {/* Direct Facebook Debugger Purge Link */}
+            <a
+              href={`https://developers.facebook.com/tools/debug/?q=${encodeURIComponent(cleanBaseUrl)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 text-[11px] text-[#1877F2] hover:underline"
+              title="If Facebook still displays an older cached image from earlier, click here to scrape again on Facebook"
+            >
+              <RefreshCw className="w-3 h-3" />
+              <span>Purge Facebook Cache</span>
+              <ExternalLink className="w-2.5 h-2.5" />
+            </a>
           </div>
 
           <div className="max-w-[480px] bg-white border border-gray-200 rounded-lg overflow-hidden shadow-xs">
@@ -176,7 +200,7 @@ export default function SocialShareBar({ post, className = '' }) {
                 alt={shareTitle}
                 className="w-full h-full object-cover"
                 onError={(e) => {
-                  e.currentTarget.src = 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1200&h=630&q=85';
+                  e.currentTarget.src = DEFAULT_BRAND_IMAGE;
                 }}
               />
             </div>

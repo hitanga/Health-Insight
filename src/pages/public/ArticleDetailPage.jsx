@@ -65,7 +65,7 @@ export default function ArticleDetailPage() {
       updatePageSEO({
         title: post.title,
         description: post.excerpt || post.seoDescription,
-        image: post.featuredImageUrl,
+        image: post.featuredImageUrl || post.socialImageUrl,
         url: window.location.href,
         publishedTime: post.publishedAt,
         author: post.authorName
