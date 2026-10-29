@@ -199,27 +199,59 @@ export default function AdminPostEditorPage() {
 
       if (isEditing) {
         const updated = await updatePost(id, payload);
-        if (updated?._blockedByClient) {
-          setFeedback({
-            success: 'Article updated and preserved! Note: Your browser ad-blocker / Brave Shields is blocking network requests to firestore.googleapis.com. Disable Shields/AdBlock for this domain for cloud sync.',
-            error: null
-          });
+        if (updated?.firestoreError) {
+          const errStr = updated.firestoreError.message || String(updated.firestoreError);
+          const isBlocked = errStr.includes('blocked') || errStr.includes('offline') || errStr.includes('timeout');
+          const isPerm = errStr.includes('permission-denied') || errStr.includes('insufficient');
+          
+          if (isBlocked) {
+            setFeedback({
+              success: 'Article updated & visible immediately on frontend! Note: Brave Shields or AdBlock is blocking firestore.googleapis.com. Toggle Brave Shields OFF to sync with Firebase Cloud.',
+              error: null
+            });
+          } else if (isPerm) {
+            setFeedback({
+              success: 'Article updated & visible immediately on frontend! Note: Firebase rules returned permission-denied. Please publish Firestore Rules in Firebase Console.',
+              error: null
+            });
+          } else {
+            setFeedback({
+              success: `Article updated & visible on website! (Cloud sync status: ${errStr})`,
+              error: null
+            });
+          }
         } else {
-          setFeedback({ success: 'Article updated successfully in Firestore!', error: null });
+          setFeedback({ success: 'Article updated successfully in Firebase Firestore Cloud Database!', error: null });
         }
       } else {
         const created = await createPost(payload);
-        if (created?._blockedByClient) {
-          setFeedback({
-            success: 'Article created and preserved! Note: Your browser ad-blocker / Brave Shields is blocking network requests to firestore.googleapis.com. Disable Shields/AdBlock for this domain for cloud sync.',
-            error: null
-          });
+        if (created?.firestoreError) {
+          const errStr = created.firestoreError.message || String(created.firestoreError);
+          const isBlocked = errStr.includes('blocked') || errStr.includes('offline') || errStr.includes('timeout');
+          const isPerm = errStr.includes('permission-denied') || errStr.includes('insufficient');
+
+          if (isBlocked) {
+            setFeedback({
+              success: 'Article created & visible immediately on frontend! Note: Brave Shields or AdBlock blocked firestore.googleapis.com. Toggle Brave Shields OFF to sync to Firebase Cloud.',
+              error: null
+            });
+          } else if (isPerm) {
+            setFeedback({
+              success: 'Article created & visible immediately on frontend! Note: Firebase rules returned permission-denied. Please publish Firestore Rules in Firebase Console.',
+              error: null
+            });
+          } else {
+            setFeedback({
+              success: `Article published and live on frontend! (Cloud sync notice: ${errStr})`,
+              error: null
+            });
+          }
         } else {
-          setFeedback({ success: 'Article created successfully in Firestore!', error: null });
+          setFeedback({ success: 'Article created successfully in Firebase Firestore Cloud Database!', error: null });
         }
         setTimeout(() => {
           navigate(`/admin/posts/edit/${created.id}`);
-        }, 1200);
+        }, 1500);
       }
     } catch (err) {
       setFeedback({ error: err.message || 'Failed to save article.', success: null });

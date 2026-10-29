@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useSettings } from '../../context/SettingsContext';
+import AdBlockNotice from '../../components/admin/AdBlockNotice';
 
 export default function AdminLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -169,6 +170,7 @@ export default function AdminLayout() {
 
         {/* Page Content */}
         <main className="p-4 sm:p-6 lg:p-8 flex-1 max-w-6xl w-full mx-auto">
+          <AdBlockNotice />
           <Outlet />
         </main>
       </div>
