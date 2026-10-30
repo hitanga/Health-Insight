@@ -12,7 +12,14 @@ import ArticleDetailPage from './pages/public/ArticleDetailPage';
 import AboutPage from './pages/public/AboutPage';
 import ContactPage from './pages/public/ContactPage';
 import PrivacyPolicyPage from './pages/public/PrivacyPolicyPage';
+import TermsOfServicePage from './pages/public/TermsOfServicePage';
+import DisclaimerPage from './pages/public/DisclaimerPage';
+import CookiePolicyPage from './pages/public/CookiePolicyPage';
+import EditorialPolicyPage from './pages/public/EditorialPolicyPage';
+import FaqPage from './pages/public/FaqPage';
+import WriteForUsPage from './pages/public/WriteForUsPage';
 import NotFoundPage from './pages/public/NotFoundPage';
+import ScrollToTop from './components/common/ScrollToTop';
 
 // Admin Pages
 import AdminLoginPage from './pages/admin/AdminLoginPage';
@@ -43,6 +50,7 @@ export default function App() {
     <AuthProvider>
       <SettingsProvider>
         <BrowserRouter>
+          <ScrollToTop />
           <Routes>
             {/* Public Layout and Routes */}
             <Route element={<PublicLayout />}>
@@ -50,8 +58,21 @@ export default function App() {
               <Route path="/about" element={<AboutPage />} />
               <Route path="/health" element={<HealthPage />} />
               <Route path="/health/:slug" element={<ArticleDetailPage />} />
+              <Route path="/category/:categorySlug" element={<HealthPage />} />
+              <Route path="/topics/:categorySlug" element={<HealthPage />} />
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+              <Route path="/terms-of-service" element={<TermsOfServicePage />} />
+              <Route path="/terms" element={<TermsOfServicePage />} />
+              <Route path="/disclaimer" element={<DisclaimerPage />} />
+              <Route path="/medical-disclaimer" element={<DisclaimerPage />} />
+              <Route path="/cookie-policy" element={<CookiePolicyPage />} />
+              <Route path="/editorial-policy" element={<EditorialPolicyPage />} />
+              <Route path="/editorial-guidelines" element={<EditorialPolicyPage />} />
+              <Route path="/faq" element={<FaqPage />} />
+              <Route path="/faqs" element={<FaqPage />} />
+              <Route path="/write-for-us" element={<WriteForUsPage />} />
+              <Route path="/careers" element={<WriteForUsPage />} />
               <Route path="*" element={<NotFoundPage />} />
             </Route>
 

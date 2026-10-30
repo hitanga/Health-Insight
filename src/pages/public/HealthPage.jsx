@@ -1,13 +1,15 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useParams } from 'react-router-dom';
 import { Search, Filter, Loader2, Sparkles, BookOpen } from 'lucide-react';
 import ArticleCard from '../../components/blog/ArticleCard';
 import { getPublishedPosts } from '../../services/postsService';
 import { getCategories } from '../../services/categoriesService';
 
 export default function HealthPage() {
+  const { categorySlug } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
-  const initialCategory = searchParams.get('category') || 'all';
+  const queryCat = searchParams.get('category');
+  const initialCategory = categorySlug || queryCat || 'all';
 
   const [posts, setPosts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -34,13 +36,11 @@ export default function HealthPage() {
     loadData();
   }, []);
 
-  // Update selected category if search param changes
+  // Update selected category if route param or search query param changes
   useEffect(() => {
-    const cat = searchParams.get('category');
-    if (cat) {
-      setSelectedCategory(cat);
-    }
-  }, [searchParams]);
+    const cat = categorySlug || searchParams.get('category') || 'all';
+    setSelectedCategory(cat);
+  }, [categorySlug, searchParams]);
 
   const handleCategoryChange = (catSlug) => {
     setSelectedCategory(catSlug);
@@ -55,11 +55,17 @@ export default function HealthPage() {
 
   // Filter and search
   const filteredPosts = useMemo(() => {
+    const selCatNorm = selectedCategory?.toLowerCase();
     return posts.filter((post) => {
+      const postCatId = post.categoryId?.toLowerCase();
+      const postCatName = post.categoryName?.toLowerCase();
+      const postCatSlug = postCatName ? postCatName.replace(/\s+/g, '-') : '';
+
       const matchesCategory =
-        selectedCategory === 'all' ||
-        post.categoryId === selectedCategory ||
-        post.categoryName?.toLowerCase() === selectedCategory.toLowerCase();
+        selCatNorm === 'all' ||
+        postCatId === selCatNorm ||
+        postCatName === selCatNorm ||
+        postCatSlug === selCatNorm;
 
       const q = searchQuery.toLowerCase().trim();
       const matchesSearch =

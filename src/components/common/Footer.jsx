@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Facebook, Twitter, Youtube, Linkedin, Mail, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
+import { Facebook, Twitter, Youtube, Linkedin, Mail, Phone, MapPin, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
 import { useSettings } from '../../context/SettingsContext';
 import { subscribeNewsletter } from '../../services/newsletterService';
 
@@ -40,19 +40,38 @@ export default function Footer() {
           {/* Column 1: Contact Information */}
           <div className="space-y-4">
             <h4 className="text-white text-base font-semibold tracking-wide">Contact Information</h4>
-            <p className="text-sm text-gray-400 leading-relaxed">
-              {settings.contactAddress || 'Jl. Raya Kuta No. 121, Badung - Bali, Indonesia.'}
-            </p>
-            {settings.contactPhone && (
-              <p className="text-sm text-gray-400 font-normal">
-                {settings.contactPhone}
-              </p>
-            )}
-            {settings.contactEmail && (
-              <p className="text-sm text-gray-400 font-normal">
-                {settings.contactEmail}
-              </p>
-            )}
+            <div className="space-y-2 text-sm text-gray-400">
+              <div className="flex items-start gap-2">
+                <MapPin className="w-4 h-4 text-[#80C8C9] shrink-0 mt-0.5" />
+                <p className="leading-relaxed">
+                  {settings.contactAddress || 'Jl. Raya Kuta No. 121, Badung - Bali, Indonesia.'}
+                </p>
+              </div>
+
+              {settings.contactPhone && (
+                <div className="flex items-center gap-2">
+                  <Phone className="w-4 h-4 text-[#80C8C9] shrink-0" />
+                  <a
+                    href={`tel:${settings.contactPhone}`}
+                    className="hover:text-white transition-colors"
+                  >
+                    {settings.contactPhone}
+                  </a>
+                </div>
+              )}
+
+              {settings.contactEmail && (
+                <div className="flex items-center gap-2">
+                  <Mail className="w-4 h-4 text-[#80C8C9] shrink-0" />
+                  <a
+                    href={`mailto:${settings.contactEmail}`}
+                    className="hover:text-white transition-colors"
+                  >
+                    {settings.contactEmail}
+                  </a>
+                </div>
+              )}
+            </div>
 
             {/* Social Icons */}
             <div className="flex items-center space-x-3 pt-2">
@@ -119,24 +138,39 @@ export default function Footer() {
               <li>
                 <Link to="/contact" className="hover:text-white transition-colors">Contact Us</Link>
               </li>
+              <li>
+                <Link to="/faq" className="hover:text-white transition-colors">Frequently Asked Questions</Link>
+              </li>
+              <li>
+                <Link to="/write-for-us" className="hover:text-white transition-colors">Write for Us</Link>
+              </li>
             </ul>
           </div>
 
-          {/* Column 3: Our Topics */}
+          {/* Column 3: Topics & Policies */}
           <div className="space-y-4">
-            <h4 className="text-white text-base font-semibold tracking-wide">Our Topics</h4>
+            <h4 className="text-white text-base font-semibold tracking-wide">Topics & Policies</h4>
             <ul className="space-y-2.5 text-sm text-gray-400">
               <li>
-                <Link to="/health?category=nutrition" className="hover:text-white transition-colors">Nutrition</Link>
+                <Link to="/category/nutrition" className="hover:text-white transition-colors">Nutrition</Link>
               </li>
               <li>
-                <Link to="/health?category=fitness" className="hover:text-white transition-colors">Fitness</Link>
+                <Link to="/category/fitness" className="hover:text-white transition-colors">Fitness</Link>
               </li>
               <li>
-                <Link to="/health?category=mental-wellness" className="hover:text-white transition-colors">Mental Wellness</Link>
+                <Link to="/category/mental-wellness" className="hover:text-white transition-colors">Mental Wellness</Link>
               </li>
               <li>
-                <Link to="/health?category=healthy-lifestyle" className="hover:text-white transition-colors">Healthy Lifestyle</Link>
+                <Link to="/category/healthy-lifestyle" className="hover:text-white transition-colors">Healthy Lifestyle</Link>
+              </li>
+              <li className="pt-1.5 border-t border-gray-800">
+                <Link to="/editorial-policy" className="hover:text-white transition-colors text-xs text-gray-400">Editorial Policy</Link>
+              </li>
+              <li>
+                <Link to="/disclaimer" className="hover:text-white transition-colors text-xs text-gray-400">Medical Disclaimer</Link>
+              </li>
+              <li>
+                <Link to="/terms-of-service" className="hover:text-white transition-colors text-xs text-gray-400">Terms of Service</Link>
               </li>
             </ul>
           </div>
@@ -187,17 +221,37 @@ export default function Footer() {
 
         {/* Medical disclaimer note */}
         <div className="pt-6 border-t border-gray-800/80 text-center">
-          <p className="text-[11px] text-gray-500 max-w-[700px] mx-auto leading-relaxed mb-4">
-            <strong>Medical Disclaimer:</strong> The information provided on this website is for general educational and informational purposes only and is not intended as medical advice, diagnosis, or treatment. Always consult a qualified physician or healthcare provider with any medical questions.
+          <p className="text-[11px] text-gray-500 max-w-[800px] mx-auto leading-relaxed mb-4">
+            <strong className="text-gray-400">
+              <Link to="/disclaimer" className="hover:text-white underline">
+                Medical Disclaimer:
+              </Link>
+            </strong>{' '}
+            The information provided on this website is for general educational and informational purposes only and is not intended as medical advice, diagnosis, or clinical treatment. Always consult a qualified physician or healthcare provider with any medical questions.{' '}
+            <Link to="/disclaimer" className="text-[#80C8C9] hover:underline inline-block">
+              Read full medical disclaimer &rarr;
+            </Link>
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-between text-xs text-gray-500 gap-2">
+          <div className="flex flex-col sm:flex-row items-center justify-between text-xs text-gray-500 gap-3">
             <div>
               {settings.copyrightText || '© 2026 HealthInsight Blog. All rights reserved.'}
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
               <Link to="/privacy-policy" className="hover:text-gray-300 transition-colors">
                 Privacy Policy
+              </Link>
+              <Link to="/terms-of-service" className="hover:text-gray-300 transition-colors">
+                Terms of Service
+              </Link>
+              <Link to="/disclaimer" className="hover:text-gray-300 transition-colors">
+                Disclaimer
+              </Link>
+              <Link to="/cookie-policy" className="hover:text-gray-300 transition-colors">
+                Cookie Policy
+              </Link>
+              <Link to="/editorial-policy" className="hover:text-gray-300 transition-colors">
+                Editorial
               </Link>
               <Link to="/contact" className="hover:text-gray-300 transition-colors">
                 Contact
