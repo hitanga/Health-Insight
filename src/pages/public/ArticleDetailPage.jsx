@@ -95,7 +95,7 @@ export default function ArticleDetailPage() {
 
   if (!post) {
     return (
-      <div className="max-w-[700px] mx-auto px-4 py-20 text-center">
+      <div className="max-w-[1200px] mx-auto px-4 py-20 text-center">
         <AlertCircle className="w-12 h-12 text-gray-300 mx-auto mb-4" />
         <h1 className="text-2xl font-bold text-[#202324] mb-2">Article Not Found</h1>
         <p className="text-sm text-gray-500 mb-6">
@@ -113,7 +113,7 @@ export default function ArticleDetailPage() {
   }
 
   return (
-    <article className="max-w-[780px] mx-auto px-4 sm:px-6 py-8 sm:py-12">
+    <article className="max-w-[1200px] mx-auto px-4 sm:px-6 py-8 sm:py-12">
       
       {/* Breadcrumb Navigation */}
       <nav className="flex items-center space-x-2 text-xs text-gray-400 mb-6 flex-wrap">

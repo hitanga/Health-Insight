@@ -6,7 +6,7 @@ export default function AboutPage() {
   const { settings } = useSettings();
 
   return (
-    <div className="max-w-[820px] mx-auto px-4 sm:px-6 py-12 sm:py-16">
+    <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-12 sm:py-16">
       
       {/* Title */}
       <div className="text-center max-w-[620px] mx-auto mb-12">

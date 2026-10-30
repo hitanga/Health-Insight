@@ -6,7 +6,7 @@ export default function PrivacyPolicyPage() {
   const { settings } = useSettings();
 
   return (
-    <div className="max-w-[800px] mx-auto px-4 sm:px-6 py-12 sm:py-16">
+    <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-12 sm:py-16">
       
       {/* Header */}
       <div className="text-center max-w-[580px] mx-auto mb-10">
