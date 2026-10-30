@@ -19,7 +19,7 @@ export default function Header() {
 
   return (
     <header className="w-full bg-[#F7F7F7] border-b border-gray-200/60 sticky top-0 z-40 backdrop-blur-sm bg-opacity-95">
-      <div className="max-w-[960px] mx-auto px-4 sm:px-6 h-18 flex items-center justify-between">
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 h-18 flex items-center justify-between">
         
         {/* Brand / Logo */}
         <Link to="/" className="flex items-center gap-3 group">
